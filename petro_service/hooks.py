@@ -1,5 +1,5 @@
-app_name = "petro_service"
-app_title = "Petroleum Service"
+app_name = "oil_services"
+app_title = "Oil Services"
 app_publisher = "divic.tech"
 app_description = "United Wagadogo Oil Field Services is a Libya-based company specializing in comprehensive oil field services, supporting the petroleum industry with efficient, high-quality service solutions. The company’s scope of work includes field operations, equipment maintenance, logistics, and various upstream and downstream support services."
 app_email = "contact@divic.tech"
