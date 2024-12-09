@@ -1,0 +1,417 @@
+{
+ "actions": [
+  {
+   "action": "accounting-dimension",
+   "action_type": "Route",
+   "group": "Dimensions",
+   "label": "Accounting Dimension"
+  },
+  {
+   "action": "inventory-dimension",
+   "action_type": "Route",
+   "group": "Dimensions",
+   "label": "Inventory Dimension"
+  }
+ ],
+ "allow_rename": 1,
+ "autoname": "format:SO-{YY}-{MM}-{#####}",
+ "creation": "2024-11-05 23:05:36.174081",
+ "default_view": "List",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_mmmo",
+  "service_type",
+  "order_date",
+  "estimated_delivery_date",
+  "status",
+  "completion_status",
+  "column_break_vkgm",
+  "customer",
+  "sales_person",
+  "company_currency",
+  "customer_currency",
+  "exchange_rate",
+  "service_items_section",
+  "items",
+  "section_break_enqq",
+  "sub_total_company",
+  "grand_total_company",
+  "column_break_iiwy",
+  "sub_total_customer",
+  "grand_total_customer",
+  "discounts_section",
+  "discount_type",
+  "discount_amount",
+  "discount_percentage",
+  "apply_discount",
+  "column_break_tget",
+  "total_discount_company",
+  "total_discount_customer",
+  "remarks_section",
+  "description",
+  "amended_from",
+  "connections_tab"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_mmmo",
+   "fieldtype": "Section Break",
+   "label": "Customer Details"
+  },
+  {
+   "allow_on_submit": 1,
+   "bold": 1,
+   "default": "Requested",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Requested\nScheduled\nIn Progress\nDelivered\nBilled\nPartially Paid\nPaid\nCancelled",
+   "reqd": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Customer",
+   "options": "Customer",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval: doc.company_currency != doc.customer_currency",
+   "fetch_from": "customer.default_currency",
+   "fieldname": "customer_currency",
+   "fieldtype": "Link",
+   "label": "Customer Currency",
+   "options": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_vkgm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "order_date",
+   "fieldtype": "Date",
+   "label": "Order Date",
+   "reqd": 1
+  },
+  {
+   "default": "Today",
+   "fieldname": "estimated_delivery_date",
+   "fieldtype": "Date",
+   "label": "Estimated Delivery Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "service_type",
+   "fieldtype": "Link",
+   "label": "Service Type",
+   "options": "Service Order Type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sales_person",
+   "fieldtype": "Link",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Sales Person",
+   "options": "Sales Person",
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "depends_on": "eval: doc.company_currency != doc.customer_currency",
+   "description": "Exchange Rate from the company to customer's  currency",
+   "fieldname": "exchange_rate",
+   "fieldtype": "Float",
+   "label": "Exchange Rate",
+   "non_negative": 1,
+   "precision": "2",
+   "reqd": 1
+  },
+  {
+   "fieldname": "company_currency",
+   "fieldtype": "Link",
+   "label": "Company Currency",
+   "options": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Items",
+   "options": "Service Order Item"
+  },
+  {
+   "fieldname": "section_break_enqq",
+   "fieldtype": "Section Break",
+   "label": "Totals"
+  },
+  {
+   "default": "0",
+   "fieldname": "grand_total_company",
+   "fieldtype": "Currency",
+   "label": "Grand Total (Company Currency)",
+   "non_negative": 1,
+   "options": "company_currency",
+   "precision": "2",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_tget",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "apply_discount",
+   "fieldtype": "Check",
+   "label": "Apply Discount"
+  },
+  {
+   "depends_on": "eval: doc.apply_discount",
+   "fieldname": "discount_type",
+   "fieldtype": "Select",
+   "label": "Discount Type",
+   "options": "Amount\nPercentage %"
+  },
+  {
+   "depends_on": "eval: doc.discount_type == \"Amount\" && doc.apply_discount",
+   "fieldname": "discount_amount",
+   "fieldtype": "Currency",
+   "label": "Discount Amount",
+   "non_negative": 1,
+   "options": "company_currency",
+   "precision": "2"
+  },
+  {
+   "depends_on": "eval: doc.discount_type == \"Percentage %\"",
+   "fieldname": "discount_percentage",
+   "fieldtype": "Percent",
+   "label": "Discount Percentage %"
+  },
+  {
+   "fieldname": "remarks_section",
+   "fieldtype": "Section Break",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text Editor",
+   "label": "Description"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "options": "Service Order",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "connections_tab",
+   "fieldtype": "Tab Break",
+   "label": "Connections",
+   "show_dashboard": 1
+  },
+  {
+   "default": "0",
+   "description": "Completion status in percentage (%)",
+   "fieldname": "completion_status",
+   "fieldtype": "Percent",
+   "label": "Completion Status",
+   "no_copy": 1,
+   "precision": "2",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "sub_total_company",
+   "fieldtype": "Currency",
+   "label": "Sub Total (Company Cuurency)",
+   "non_negative": 1,
+   "options": "company_currency",
+   "precision": "2",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_iiwy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "sub_total_customer",
+   "fieldtype": "Currency",
+   "label": "Sub Total (Customer Cuurency)",
+   "non_negative": 1,
+   "options": "customer_currency",
+   "precision": "2",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "grand_total_customer",
+   "fieldtype": "Currency",
+   "label": "Grand Total (Customer Currency)",
+   "non_negative": 1,
+   "options": "customer_currency",
+   "precision": "2",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "discounts_section",
+   "fieldtype": "Section Break",
+   "label": "Discounts"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval: doc.apply_discount",
+   "fieldname": "total_discount_company",
+   "fieldtype": "Currency",
+   "label": "Total Discount (Company Currency)",
+   "non_negative": 1,
+   "options": "company_currency",
+   "precision": "2",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "depends_on": "eval: doc.apply_discount",
+   "fieldname": "total_discount_customer",
+   "fieldtype": "Currency",
+   "label": "Total Discount (Customer Currency)",
+   "non_negative": 1,
+   "options": "customer_currency",
+   "precision": "2",
+   "read_only": 1
+  },
+  {
+   "fieldname": "service_items_section",
+   "fieldtype": "Section Break",
+   "label": "Service Items"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2024-11-17 07:14:07.962191",
+ "modified_by": "Administrator",
+ "module": "Petroleum Service",
+ "name": "Service Order",
+ "naming_rule": "Expression",
+ "nsm_parent_field": "parent_service_order",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Master Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Support Team",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Light Blue",
+   "title": "Requested"
+  },
+  {
+   "color": "Cyan",
+   "title": "Scheduled"
+  },
+  {
+   "color": "Yellow",
+   "title": "In Progress"
+  },
+  {
+   "color": "Blue",
+   "title": "Delivered"
+  },
+  {
+   "color": "Purple",
+   "title": "Billed"
+  },
+  {
+   "color": "Light Blue",
+   "title": "Partially Paid"
+  },
+  {
+   "color": "Green",
+   "title": "Paid"
+  },
+  {
+   "color": "Red",
+   "title": "Cancelled"
+  }
+ ],
+ "track_changes": 1,
+ "track_seen": 1
+}

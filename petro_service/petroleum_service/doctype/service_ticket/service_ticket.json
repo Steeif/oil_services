@@ -1,0 +1,344 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:ST-{YY}-{MM}-{#####}",
+ "creation": "2024-11-06 04:48:27.004302",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_ywrb",
+  "service_order",
+  "service_type",
+  "ticket_date",
+  "status",
+  "column_break_igjp",
+  "customer",
+  "company_currency",
+  "customer_currency",
+  "exchange_rate",
+  "service_items_section",
+  "items",
+  "totals_section",
+  "sub_total_company",
+  "grand_total_company",
+  "column_break_yyff",
+  "sub_total_customer",
+  "grand_total_customer",
+  "discounts_section",
+  "column_break_tkvb",
+  "discount_type",
+  "discount_amount",
+  "discount_percentage",
+  "apply_discount",
+  "column_break_juoa",
+  "total_discount_company",
+  "total_discount_customer",
+  "remarks_section",
+  "description",
+  "amended_from",
+  "connections_tab"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_ywrb",
+   "fieldtype": "Section Break",
+   "label": "Ticket"
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Draft\nAssigned\nIn Progress\nResolved\nBilled\nPartially Paid\nClosed\nCancelled",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "service_order.customer",
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "options": "Customer",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_igjp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "ticket_date",
+   "fieldtype": "Date",
+   "label": "Ticket Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "service_order",
+   "fieldtype": "Link",
+   "label": "Service Order",
+   "link_filters": "[[\"Service Order\",\"completion_status\",\"<\",100]]",
+   "options": "Service Order",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "service_order.company_currency",
+   "fieldname": "company_currency",
+   "fieldtype": "Link",
+   "label": "Company Currency",
+   "options": "Currency",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval: doc.company_currency != doc.customer_currency",
+   "fetch_from": "service_order.exchange_rate",
+   "fieldname": "exchange_rate",
+   "fieldtype": "Float",
+   "label": "Exchange Rate",
+   "non_negative": 1,
+   "precision": "2",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval: doc.service_order",
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Items",
+   "no_copy": 1,
+   "options": "Service Ticket Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "totals_section",
+   "fieldtype": "Section Break",
+   "label": "Totals"
+  },
+  {
+   "default": "0",
+   "fieldname": "grand_total_company",
+   "fieldtype": "Currency",
+   "label": "Grand Total (Company Currency)",
+   "non_negative": 1,
+   "options": "company_currency",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_tkvb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fetch_from": "service_order.apply_discount",
+   "fieldname": "apply_discount",
+   "fieldtype": "Check",
+   "label": "Apply Discount"
+  },
+  {
+   "fetch_from": "service_order.discount_type",
+   "fieldname": "discount_type",
+   "fieldtype": "Select",
+   "label": "Discount Type",
+   "options": "Amount\nPercentage %"
+  },
+  {
+   "depends_on": "eval: doc.discount_type == \"Amount\" && doc.apply_discount",
+   "fetch_from": "service_order.discount_amount",
+   "fieldname": "discount_amount",
+   "fieldtype": "Currency",
+   "label": "Discount Amount",
+   "non_negative": 1,
+   "options": "company_currency"
+  },
+  {
+   "depends_on": "eval: doc.discount_type == \"Percentage %\"",
+   "fetch_from": "service_order.discount_percentage",
+   "fieldname": "discount_percentage",
+   "fieldtype": "Percent",
+   "label": "Discount Percentage %",
+   "precision": "2",
+   "read_only": 1
+  },
+  {
+   "fieldname": "remarks_section",
+   "fieldtype": "Section Break",
+   "label": "Remarks"
+  },
+  {
+   "fetch_from": "service_order.description",
+   "fetch_if_empty": 1,
+   "fieldname": "description",
+   "fieldtype": "Text Editor",
+   "label": "Description"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Service Ticket",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "connections_tab",
+   "fieldtype": "Tab Break",
+   "label": "Connections",
+   "show_dashboard": 1
+  },
+  {
+   "depends_on": "eval: doc.company_currency != doc.customer_currency",
+   "fetch_from": "service_order.customer_currency",
+   "fieldname": "customer_currency",
+   "fieldtype": "Link",
+   "label": "Customer Currency",
+   "options": "Currency",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "sub_total_company",
+   "fieldtype": "Currency",
+   "label": "Sub Total (Company Cuurency)",
+   "non_negative": 1,
+   "options": "company_currency",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_yyff",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "sub_total_customer",
+   "fieldtype": "Currency",
+   "label": "Sub Total (Customer Cuurency)",
+   "non_negative": 1,
+   "options": "customer_currency",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "grand_total_customer",
+   "fieldtype": "Currency",
+   "label": "Grand Total (Customer Currency)",
+   "non_negative": 1,
+   "options": "customer_currency",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "discounts_section",
+   "fieldtype": "Section Break",
+   "label": "Discounts"
+  },
+  {
+   "fieldname": "column_break_juoa",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval: doc.apply_discount",
+   "fieldname": "total_discount_company",
+   "fieldtype": "Currency",
+   "label": "Total Discount (Company Currency)",
+   "non_negative": 1,
+   "options": "company_currency",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "depends_on": "eval: doc.apply_discount",
+   "fieldname": "total_discount_customer",
+   "fieldtype": "Currency",
+   "label": "Total Discount (Customer Currency)",
+   "non_negative": 1,
+   "options": "customer_currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "service_items_section",
+   "fieldtype": "Section Break",
+   "label": "Service Items"
+  },
+  {
+   "fetch_from": "service_order.service_type",
+   "fieldname": "service_type",
+   "fieldtype": "Link",
+   "label": "Service Type",
+   "options": "Service Order Type",
+   "read_only": 1,
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2024-11-17 07:54:12.416525",
+ "modified_by": "Administrator",
+ "module": "Petroleum Service",
+ "name": "Service Ticket",
+ "naming_rule": "Expression",
+ "nsm_parent_field": "parent_service_ticket",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Cyan",
+   "title": "Assigned"
+  },
+  {
+   "color": "Yellow",
+   "title": "In Progress"
+  },
+  {
+   "color": "Green",
+   "title": "Resolved"
+  },
+  {
+   "color": "Purple",
+   "title": "Billed"
+  },
+  {
+   "color": "Light Blue",
+   "title": "Partially Paid"
+  },
+  {
+   "color": "Gray",
+   "title": "Closed"
+  },
+  {
+   "color": "Red",
+   "title": "Cancelled"
+  }
+ ],
+ "track_changes": 1,
+ "track_seen": 1
+}
